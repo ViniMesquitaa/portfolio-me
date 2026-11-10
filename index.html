@@ -1,0 +1,1240 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Marcos Vinicius | Desenvolvedor de Software</title>
+  <meta name="description" content="Marcos Vinicius, Desenvolvedor de Software Full Stack com foco em .NET, React e IA aplicada à engenharia de software." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script>
+    (function () {
+      var t;
+      try { t = localStorage.getItem("theme"); } catch (e) {}
+      if (!t) t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <style>
+    :root {
+      --ink: #ffffff;
+      --ink-soft: rgba(255, 255, 255, 0.94);
+      --ink-mute: rgba(255, 255, 255, 0.8);
+      --night: #1a2468;
+      --glass: rgba(20, 34, 104, 0.28);
+      --glass-hi: rgba(20, 34, 104, 0.38);
+      --pill: rgba(16, 28, 92, 0.42);
+      --line: rgba(255, 255, 255, 0.32);
+      --display: "Geist", system-ui, sans-serif;
+      --body: "Geist", system-ui, sans-serif;
+      --mono: "Geist Mono", ui-monospace, monospace;
+      --gutter: clamp(16px, 5vw, 72px);
+      --max: 1180px;
+
+      /* fotos e tom base: modo dia */
+      --img-hero: url("assets/hero-dia.png");
+      --img-mid:  url("assets/ceu-pastel.png");
+      --img-work: url("assets/aviao-dia.png");
+      --img-edu:  url("assets/passaro-dia.png");
+      --img-end:  url("assets/campo-entardecer.png");
+      --img-base: url("assets/ceu-base-dia.jpg");
+      --bg: linear-gradient(to bottom, #5f91e4 0%, #5585dc 30%, #5a8ae0 55%, #5383db 80%, #6a8fe6 100%);
+      --nav-solid: rgba(30, 50, 130, 0.42);
+      --scrim: rgba(20, 35, 105, .3);
+      color-scheme: light;
+    }
+
+    /* ---------- modo noite ---------- */
+    :root[data-theme="dark"] {
+      --img-hero: url("assets/hero-noite.png");
+      --img-mid:  url("assets/ceu-estrelado.png");
+      --img-work: url("assets/aviao-noite.png");
+      --img-edu:  url("assets/passaro-noite.png");
+      --img-end:  url("assets/campo-noite.png");
+      --img-base: url("assets/ceu-base-noite.jpg");
+      --bg: linear-gradient(to bottom, #0b1a6a 0%, #0a1758 30%, #0a1550 60%, #0b165a 85%, #0a1446 100%);
+      --ink-soft: rgba(228, 235, 255, 0.92);
+      --ink-mute: rgba(200, 214, 255, 0.74);
+      --glass: rgba(140, 165, 255, 0.08);
+      --glass-hi: rgba(140, 165, 255, 0.15);
+      --pill: rgba(140, 165, 255, 0.12);
+      --line: rgba(190, 205, 255, 0.22);
+      --night: #0a1550;
+      --nav-solid: rgba(8, 16, 70, 0.55);
+      --scrim: rgba(3, 8, 40, .35);
+      color-scheme: dark;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 96px; }
+    body {
+      font-family: var(--body);
+      color: var(--ink);
+      /* céu base contínuo: foto + espelho vertical repetidos, na escala real (sem ampliar) */
+      background: var(--img-base) top center / max(100%, 1500px) auto repeat-y, var(--bg);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    a { color: inherit; }
+    button { font: inherit; color: inherit; }
+    ::selection { background: var(--ink); color: var(--night); }
+
+    .wrap { width: min(var(--max), 100% - var(--gutter) * 2); margin-inline: auto; }
+
+    /* ---------- nav ---------- */
+    .nav {
+      position: fixed;
+      top: 18px; left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      width: min(var(--max), 100% - 32px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 10px 10px 10px 22px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      transition: background .4s, border-color .4s;
+    }
+    .nav.solid {
+      background: var(--nav-solid);
+      border-color: var(--line);
+      backdrop-filter: blur(16px) saturate(1.2);
+      -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    }
+    .logo {
+      font-family: var(--display);
+      font-weight: 300;
+      font-size: 1.2rem;
+      letter-spacing: -0.01em;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .nav ul { display: flex; gap: 2px; list-style: none; }
+    .nav ul a {
+      display: block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: .9rem;
+      font-weight: 500;
+      text-decoration: none;
+      color: var(--ink-soft);
+      transition: background .25s, color .25s;
+    }
+    .nav ul a:hover { background: var(--glass-hi); color: var(--ink); }
+    .nav-right { display: flex; align-items: center; gap: 8px; }
+
+    /* alternador de tema: só ícone */
+    .theme {
+      width: 42px; height: 42px;
+      display: grid;
+      place-items: center;
+      background: transparent;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background .25s, transform .4s;
+    }
+    .theme:hover { background: var(--glass-hi); }
+
+    /* seletor de idioma */
+    .lang {
+      display: flex;
+      padding: 3px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+    }
+    .lang button {
+      border: 0;
+      background: none;
+      padding: 8px 11px;
+      border-radius: 999px;
+      font-family: var(--mono);
+      font-size: .74rem;
+      letter-spacing: .04em;
+      color: var(--ink-soft);
+      cursor: pointer;
+      transition: background .3s, color .3s;
+    }
+    .lang button:hover { color: var(--ink); }
+    .lang button[aria-pressed="true"] { background: var(--ink); color: var(--night); font-weight: 600; }
+
+    /* scroll suave (Lenis) */
+    html.lenis, html.lenis body { height: auto; }
+    .lenis.lenis-smooth { scroll-behavior: auto !important; }
+    .lenis.lenis-stopped { overflow: hidden; }
+    .theme:active { transform: rotate(-30deg); }
+    .theme svg { width: 18px; height: 18px; grid-area: 1 / 1; transition: opacity .3s, transform .5s; }
+    .theme .sun  { opacity: 0; transform: rotate(-90deg) scale(.6); }
+    :root[data-theme="dark"] .theme .sun  { opacity: 1; transform: none; }
+    :root[data-theme="dark"] .theme .moon { opacity: 0; transform: rotate(90deg) scale(.6); }
+
+    /* ---------- seções com céu ---------- */
+    /* céu contínuo: cada seção tem a própria foto (cover, rola junto) e o topo dela
+       se funde na foto da seção anterior, sem corte nem faixa sólida.
+       Sem isolation: os ::before ficam todos no fundo, atrás de qualquer conteúdo. */
+    /* fotos de destaque na largura da tela (escala real, sem zoom), fundidas no céu base do body */
+    #topo, #projetos, #formacao, #contato {
+      position: relative;
+      --fw: max(100vw, 1500px);                 /* largura da foto: nunca maior que ~1x o arquivo */
+      --fh: calc(var(--fw) * 741 / 2123);       /* altura proporcional */
+      --blend: calc(var(--fh) * .3);            /* faixa de fusão com o céu base */
+    }
+    #topo::before, #projetos::before, #formacao::before, #contato::before {
+      content: "";
+      position: absolute;
+      left: 0; right: 0;
+      top: calc(-1 * var(--blend));
+      height: var(--fh);
+      z-index: -1;
+      pointer-events: none;
+      background: var(--sky) center top / var(--fw) auto no-repeat;
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 var(--blend), #000 calc(100% - var(--blend)), transparent 100%);
+              mask-image: linear-gradient(to bottom, transparent 0, #000 var(--blend), #000 calc(100% - var(--blend)), transparent 100%);
+    }
+    #topo::before {
+      top: 40px; /* lua abaixo da nav */
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 90px, #000 calc(100% - var(--blend)), transparent 100%);
+              mask-image: linear-gradient(to bottom, transparent 0, #000 90px, #000 calc(100% - var(--blend)), transparent 100%);
+    }
+    #contato::before {
+      top: auto; bottom: 0;
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 var(--blend));
+              mask-image: linear-gradient(to bottom, transparent 0, #000 var(--blend));
+    }
+    #topo     { --sky: var(--img-hero); }
+    #projetos { --sky: var(--img-work); }
+    #formacao { --sky: var(--img-edu); }
+    #contato  { --sky: var(--img-end); }
+    .hero::after, .contact::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+    }
+    .hero::after { background: radial-gradient(70% 60% at 25% 50%, var(--scrim), transparent 70%); }
+    .contact::after { background: radial-gradient(55% 40% at 50% 38%, var(--scrim), transparent 75%); }
+
+    /* ---------- hero ---------- */
+    .hero {
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      padding: 140px 0 80px;
+    }
+    .hero h1 {
+      font-family: var(--display);
+      font-weight: 600;
+      font-size: clamp(3.2rem, 10vw, 9rem);
+      line-height: .9;
+      letter-spacing: -.055em;
+      margin-bottom: 32px;
+      text-shadow: 0 2px 40px rgba(20, 32, 100, .3);
+    }
+    .hero h1 span { display: block; font-weight: 300; letter-spacing: -.05em; }
+    .role {
+      font-size: clamp(1.05rem, 1.7vw, 1.35rem);
+      font-weight: 400;
+      max-width: 42ch;
+      color: var(--ink-soft);
+      letter-spacing: -.01em;
+    }
+    .role b { font-weight: 600; color: var(--ink); }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 40px;
+    }
+    .chip, .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: .9rem;
+      font-weight: 500;
+      text-decoration: none;
+      border: 1px solid var(--line);
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .chip { color: var(--ink-soft); }
+    .btn { transition: background .25s, transform .25s, color .25s; }
+    .btn:hover { background: var(--ink); color: var(--night); transform: translateY(-1px); }
+    .btn.primary { background: var(--ink); color: var(--night); border-color: var(--ink); font-weight: 600; }
+    .btn.primary:hover { background: rgba(255, 255, 255, .85); }
+    .btn .ico { width: 18px; height: 18px; flex: none; border-radius: 4px; object-fit: cover; }
+    .btn .ico.gh { border-radius: 50%; }
+
+    /* ---------- blocos genéricos ---------- */
+    .block { padding: clamp(72px, 12vh, 140px) 0; }
+    .block-head {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 48px;
+    }
+    .num {
+      font-family: var(--mono);
+      font-size: .8rem;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      text-shadow: 0 1px 10px rgba(20, 32, 100, .55);
+    }
+    h2 {
+      font-family: var(--display);
+      font-weight: 600;
+      font-size: clamp(2rem, 4.6vw, 3.6rem);
+      line-height: 1.02;
+      letter-spacing: -.045em;
+      text-shadow: 0 2px 30px rgba(20, 32, 100, .25);
+      text-wrap: balance;
+    }
+    .indent { margin-left: 0; }
+
+    /* sobre */
+    .about p {
+      font-size: clamp(1.05rem, 1.4vw, 1.2rem);
+      color: var(--ink-soft);
+      max-width: 60ch;
+    }
+    .about p + p { margin-top: 1.1em; }
+    .about .lead {
+      font-weight: 400;
+      font-size: clamp(1.4rem, 2.6vw, 2.1rem);
+      line-height: 1.3;
+      letter-spacing: -.03em;
+      color: var(--ink);
+      max-width: 28ch;
+      margin-bottom: 1.2em;
+    }
+    .about strong { color: var(--ink); font-weight: 600; }
+
+    /* ---------- projetos ---------- */
+    .projects {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+    .card {
+      position: relative;
+      padding: clamp(24px, 3vw, 36px);
+      border-radius: 28px;
+      background: var(--glass);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: background .3s, transform .3s;
+    }
+    .card:hover { background: var(--glass-hi); transform: translateY(-3px); }
+    .card.featured {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: clamp(24px, 4vw, 56px);
+    }
+    .card.wide { grid-column: 1 / -1; }
+    .tag {
+      align-self: flex-start;
+      font-family: var(--mono);
+      font-size: .7rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: 5px 11px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .16);
+      color: var(--ink);
+    }
+    .tag.wip { background: var(--ink); color: var(--night); }
+    .card h3 {
+      font-family: var(--display);
+      font-weight: 600;
+      font-size: clamp(1.4rem, 2.2vw, 1.9rem);
+      line-height: 1.05;
+      letter-spacing: -.04em;
+    }
+    .card.featured h3 { font-size: clamp(2rem, 4vw, 3.2rem); }
+    .card .sub { font-weight: 300; color: var(--ink-soft); font-size: 1.05rem; }
+    .card p { color: var(--ink-soft); }
+    .card ul { list-style: none; display: grid; gap: 8px; }
+    .card li {
+      position: relative;
+      padding-left: 18px;
+      color: var(--ink-soft);
+      font-size: .95rem;
+    }
+    .card li::before {
+      content: "";
+      position: absolute;
+      left: 0; top: .62em;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--ink);
+    }
+    .card .link {
+      margin-top: auto;
+      align-self: flex-start;
+      font-weight: 600;
+      font-size: .9rem;
+      text-decoration: none;
+      border-bottom: 1.5px solid var(--line);
+      padding-bottom: 2px;
+      transition: border-color .25s;
+    }
+    .card .link:hover { border-color: var(--ink); }
+    .card .col { display: flex; flex-direction: column; gap: 14px; }
+
+    /* ---------- experiência ---------- */
+    .jobs { display: grid; gap: 56px; }
+    .job {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      padding-top: 28px;
+      border-top: 1px solid var(--line);
+    }
+    .job .when { font-family: var(--mono); font-size: .8rem; text-transform: uppercase; color: var(--ink-mute); }
+    .job h3 {
+      font-family: var(--display);
+      font-weight: 600;
+      font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+      letter-spacing: -.04em;
+      line-height: 1.1;
+    }
+    .job h3 span { font-weight: 300; color: var(--ink-soft); }
+    .job .desc { margin-top: 14px; color: var(--ink-soft); max-width: 62ch; font-size: 1.05rem; }
+    .job ul { list-style: none; margin: 20px 0 24px; display: grid; gap: 10px; max-width: 68ch; }
+    .job li { color: var(--ink-soft); padding-left: 18px; position: relative; }
+    .job li::before {
+      content: ""; position: absolute; left: 0; top: .72em;
+      width: 8px; height: 1.5px; background: var(--ink-mute);
+    }
+
+    .pills { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pill {
+      font-size: .85rem;
+      font-weight: 500;
+      padding: 6px 13px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--pill);
+      color: var(--ink);
+      white-space: nowrap;
+    }
+    .pill.key { background: var(--ink); color: var(--night); border-color: var(--ink); font-weight: 600; }
+
+    /* ---------- stack ---------- */
+    .stack {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+    }
+    .stack-group {
+      padding: 24px;
+      border-radius: 24px;
+      background: var(--glass-hi);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .stack-group h3 {
+      font-weight: 500;
+      font-size: 1.05rem;
+      letter-spacing: -.02em;
+      margin-bottom: 16px;
+    }
+    .legend { margin-top: 18px; font-size: .85rem; color: var(--ink-soft); display: flex; align-items: center; gap: 8px; }
+    .legend i { width: 12px; height: 12px; border-radius: 50%; background: var(--ink); }
+
+    /* ---------- formação: carrossel ---------- */
+    .tabs {
+      position: relative;
+      display: inline-flex;
+      padding: 5px;
+      border-radius: 999px;
+      background: var(--glass);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      margin-bottom: 28px;
+    }
+    .tabs .indicator {
+      position: absolute;
+      top: 5px; bottom: 5px; left: 5px;
+      border-radius: 999px;
+      background: var(--ink);
+      transition: transform .45s cubic-bezier(.6, .1, .2, 1), width .45s cubic-bezier(.6, .1, .2, 1);
+    }
+    .tabs button {
+      position: relative;
+      z-index: 1;
+      border: 0;
+      background: none;
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-size: .92rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: color .3s;
+    }
+    .tabs button[aria-selected="true"] { color: var(--night); font-weight: 600; }
+
+    .carousel { position: relative; overflow: hidden; touch-action: pan-y; transition: height .5s cubic-bezier(.6, .1, .2, 1); }
+    .track { align-items: flex-start; }
+    .track {
+      display: flex;
+      transition: transform .6s cubic-bezier(.6, .1, .2, 1);
+    }
+    .slide { flex: 0 0 100%; min-width: 0; padding-right: 2px; }
+    .slide[aria-hidden="true"] { visibility: hidden; transition: visibility 0s .6s; }
+
+    .edu-list { list-style: none; display: grid; gap: 12px; }
+    .edu-list.certs { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+    .edu-list li {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 20px;
+      padding: 18px 24px 18px 18px;
+      border-radius: 24px;
+      background: var(--glass);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      transition: background .3s, border-color .3s;
+    }
+    .edu-list li:hover { background: var(--glass-hi); border-color: rgba(255, 255, 255, .5); }
+    .edu-logo {
+      width: 132px; height: 84px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 12px;
+      border-radius: 18px;
+      background: #fff;
+      overflow: hidden;
+      box-shadow: 0 8px 28px rgba(10, 20, 80, .2);
+    }
+    .edu-logo img { display: block; width: auto; height: auto; max-width: 100%; max-height: 100%; object-fit: contain; }
+    .edu-logo.glyph {
+      background: var(--glass-hi);
+      border: 1px solid var(--line);
+      box-shadow: none;
+    }
+    .certs .edu-logo.glyph { width: 52px; height: 52px; border-radius: 14px; }
+    .edu-logo svg { width: 26px; height: 26px; }
+    .certs .edu-logo svg { width: 22px; height: 22px; }
+    .edu-info { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+    .edu-list b { font-weight: 600; font-size: 1.15rem; letter-spacing: -.025em; line-height: 1.25; }
+    .certs b { font-size: 1.02rem; font-weight: 500; }
+    .edu-list small { color: var(--ink-soft); font-size: .92rem; }
+    .edu-side { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+    .edu-list .yr { font-family: var(--mono); font-size: .78rem; color: var(--ink-mute); text-transform: uppercase; white-space: nowrap; }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 4px 11px;
+      border-radius: 999px;
+      font-size: .78rem;
+      font-weight: 500;
+      white-space: nowrap;
+      border: 1px solid var(--line);
+      background: var(--pill);
+    }
+    .status.live { background: var(--ink); color: var(--night); border-color: var(--ink); font-weight: 600; }
+    .status.live i {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+    @keyframes pulse { 50% { opacity: .3; } }
+
+    .car-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 22px; }
+    .dots { display: flex; gap: 8px; }
+    .dots span { width: 8px; height: 8px; border-radius: 999px; background: var(--line); transition: width .4s, background .4s; }
+    .dots span.on { width: 26px; background: var(--ink); }
+    .arrows { display: flex; gap: 8px; }
+    .arrows button {
+      width: 42px; height: 42px;
+      display: grid; place-items: center;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: var(--glass);
+      cursor: pointer;
+      transition: background .25s, opacity .25s;
+    }
+    .arrows button:hover:not(:disabled) { background: var(--ink); color: var(--night); }
+    .arrows button:disabled { opacity: .35; cursor: default; }
+    .arrows svg { width: 16px; height: 16px; }
+
+    /* ---------- contato ---------- */
+    .contact {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      min-height: 100svh;
+      padding: 22vh 0 40px;
+      text-align: center;
+    }
+    .contact .num { display: block; }
+    .contact h2 {
+      font-size: clamp(2.6rem, 8vw, 6.4rem);
+      line-height: .95;
+      margin: 18px auto 24px;
+      max-width: 14ch;
+      text-shadow: 0 2px 40px rgba(20, 32, 100, .4);
+    }
+    .contact h2 em { font-style: normal; font-weight: 300; }
+    .contact p { color: var(--ink-soft); max-width: 44ch; margin: 0 auto 36px; font-size: 1.05rem; }
+    .contact .meta { justify-content: center; margin-top: 0; }
+    footer {
+      margin-top: auto;
+      padding-top: 80px;
+      font-family: var(--mono);
+      font-size: .78rem;
+      color: var(--ink);
+      text-shadow: 0 1px 12px rgba(0, 0, 0, .45);
+    }
+
+    /* ---------- reveal ---------- */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
+    .reveal.in { opacity: 1; transform: none; }
+
+    /* ---------- responsivo ---------- */
+    @media (max-width: 900px) {
+      .nav ul { display: none; }
+      .block-head, .job { grid-template-columns: 1fr; gap: 10px; }
+      .indent { margin-left: 0; }
+      .projects { grid-template-columns: 1fr; }
+      .card.featured { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 620px) {
+      .edu-list li { grid-template-columns: auto 1fr; gap: 14px; padding: 16px; }
+      .edu-side { grid-column: 1 / -1; flex-direction: row; align-items: center; justify-content: space-between; }
+      .edu-logo { width: 104px; height: 68px; }
+    }
+    @media (max-width: 520px) {
+      .tabs button { padding: 9px 14px; font-size: .85rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav" id="nav">
+    <a class="logo" href="#topo">Marcos Vinicius</a>
+    <ul>
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#projetos">Projetos</a></li>
+      <li><a href="#experiencia">Experiência</a></li>
+      <li><a href="#stack">Stack</a></li>
+      <li><a href="#formacao">Formação</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="lang" role="group" aria-label="Idioma / Language">
+        <button type="button" data-lang="pt" aria-pressed="true">PT</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <button class="theme" id="theme" type="button" aria-label="Alternar entre modo dia e noite">
+        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/></svg>
+      </button>
+      <a class="btn primary" href="#contato">Contato</a>
+    </div>
+  </nav>
+
+  <!-- ===================== HERO ===================== -->
+  <header class="hero" id="topo">
+    <div class="wrap">
+      <h1 class="reveal">Marcos<span>Vinicius</span></h1>
+      <p class="role reveal">
+        Desenvolvedor de Software <b>Full Stack</b> com foco em .NET, React e
+        <b>Inteligência Artificial</b> aplicada à engenharia de software.
+      </p>
+      <div class="meta reveal">
+        <a class="btn primary" href="#projetos">Ver projetos</a>
+        <a class="btn" href="https://github.com/ViniMesquitaa" target="_blank" rel="noopener"><img class="ico gh" src="assets/icon-github.png" alt="" aria-hidden="true">GitHub</a>
+        <!-- TODO: trocar pelo URL real do LinkedIn -->
+        <a class="btn" href="#" target="_blank" rel="noopener"><img class="ico" src="assets/icon-linkedin.png" alt="" aria-hidden="true">LinkedIn</a>      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ===================== SOBRE ===================== -->
+    <section class="block about" id="sobre">
+      <div class="wrap">
+        <div class="block-head reveal">
+          <span class="num">01 · Sobre</span>
+          <h2>Problemas reais, soluções simples.</h2>
+        </div>
+        <div class="indent reveal">
+          <p class="lead">Construo software que torna processos mais simples e eficientes, do problema à arquitetura, da implementação à evolução.</p>
+          <p>Minha experiência envolve desenvolvimento <strong>Full Stack</strong>, criação de APIs, arquitetura de software e interfaces modernas. Trabalho principalmente com o ecossistema <strong>.NET, C#, React e TypeScript</strong>.</p>
+          <p>Tenho me aprofundado em <strong>IA aplicada à engenharia de software</strong>, como agentes, LLMs, RAG, MCP e Context Engineering. Atualmente desenvolvo a <strong>Neural Seam</strong>, uma plataforma de inteligência e orquestração do desenvolvimento de software com IA.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== PROJETOS ===================== -->
+    <section class="block" id="projetos">
+      <div class="wrap">
+        <div class="block-head reveal">
+          <span class="num">02 · Projetos</span>
+          <h2>O que estou construindo.</h2>
+        </div>
+
+        <div class="projects">
+          <article class="card featured reveal">
+            <div class="col">
+              <span class="tag">Projeto principal</span>
+              <h3>Neural Seam</h3>
+              <p class="sub">Software Engineering Intelligence Platform</p>
+              <p>Plataforma que organiza e orquestra o desenvolvimento de software com IA: contexto compartilhado, documentação, planejamento e acompanhamento da execução de projetos.</p>
+              <a class="link" href="https://neuralseam.cloud" target="_blank" rel="noopener">neuralseam.cloud ↗</a>
+            </div>
+            <div class="col">
+              <ul>
+                <li>Arquitetura de plataforma SaaS</li>
+                <li>Orquestração de agentes de IA com Claude, Gemini e Codex</li>
+                <li>Context Engineering e documentação técnica viva</li>
+                <li>Gestão de projetos, integrações com GitHub e estratégias de branches</li>
+              </ul>
+              <div class="pills">
+                <span class="pill key">React</span>
+                <span class="pill key">TypeScript</span>
+                <span class="pill">Go</span>
+                <span class="pill key">.NET</span>
+                <span class="pill">MCP</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="card reveal">
+            <span class="tag">Dev tools</span>
+            <h3>ns-session-radar</h3>
+            <p class="sub">AI Coding Session Monitoring</p>
+            <p>Ferramenta para acompanhar sessões de desenvolvimento assistido por IA.</p>
+            <ul>
+              <li>Monitoramento de atividades e análise de sessões</li>
+              <li>Acompanhamento de consumo de tokens</li>
+              <li>Visualização de informações técnicas</li>
+              <li>Integração com ferramentas de IA para código</li>
+            </ul>
+            <a class="link" href="https://github.com/NeuralSeam/ns-session-radar" target="_blank" rel="noopener">GitHub ↗</a>
+          </article>
+
+          <article class="card reveal">
+            <span class="tag wip">Open source · Em desenvolvimento</span>
+            <h3>non-exceed-mem</h3>
+            <p class="sub">Local Resource Management</p>
+            <p>Gerenciamento de recursos da máquina para evitar gargalos de memória ao usar Docker e assistentes de programação ao mesmo tempo.</p>
+            <ul>
+              <li>Foco em memória RAM, processos e containers</li>
+              <li>Aplicação desktop multiplataforma</li>
+            </ul>
+          </article>
+
+          <article class="card reveal">
+            <span class="tag">Saúde mental · SaaS</span>
+            <h3>Refúgio</h3>
+            <p class="sub">Saúde mental, sigilo e acolhimento</p>
+            <p>Plataforma que conecta quem precisa de acolhimento a psicólogos verificados pelo CRP, com anonimato por padrão: sem e-mail, sem nome real, só um alias e uma senha.</p>
+            <div class="pills">
+              <span class="pill key">Alias anônimo</span>
+              <span class="pill">Dados criptografados</span>
+              <span class="pill">Verificação CRP</span>
+              <span class="pill">Anamneses personalizáveis</span>
+              <span class="pill">Agenda e sessões</span>
+              <span class="pill">Comunidade</span>
+            </div>
+            <a class="link" href="https://refugie.vercel.app/" target="_blank" rel="noopener">refugie.vercel.app ↗</a>
+          </article>
+
+          <article class="card reveal">
+            <span class="tag">Educação · SaaS</span>
+            <h3>Verbium</h3>
+            <p class="sub">Plataforma de estudos inteligente</p>
+            <p>Kanban, flashcards com IA, revisão espaçada e Método Feynman integrados numa plataforma construída sobre ciência cognitiva.</p>
+            <div class="pills">
+              <span class="pill key">Flashcards com IA</span>
+              <span class="pill">Revisão espaçada</span>
+              <span class="pill">Kanban</span>
+              <span class="pill">Método Feynman</span>
+              <span class="pill">Simulados ENEM</span>
+              <span class="pill">Relatórios</span>
+            </div>
+            <a class="link" href="https://verbium.vercel.app/" target="_blank" rel="noopener">verbium.vercel.app ↗</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== EXPERIÊNCIA ===================== -->
+    <section class="block" id="experiencia">
+      <div class="wrap">
+        <div class="block-head reveal">
+          <span class="num">03 · Experiência</span>
+          <h2>Onde trabalho.</h2>
+        </div>
+
+        <div class="jobs">
+          <div class="job reveal">
+            <span class="when">Atual</span>
+            <div>
+              <h3>Neural Seam <span>· Software house</span></h3>
+              <p class="desc">Uma software house fora do convencional. Em vez de só entregar código sob demanda, acelera projetos que já estão em andamento, cria produtos do zero e faz consultoria para empresas que já têm time de desenvolvimento.</p>
+              <ul>
+                <li>Aceleração de projetos existentes junto ao time do cliente.</li>
+                <li>Criação de produtos e plataformas do zero.</li>
+                <li>Consultoria em arquitetura, processos e engenharia de software.</li>
+                <li>Engenharia orientada por IA, com agentes e Context Engineering.</li>
+              </ul>
+              <div class="pills">
+                <span class="pill key">AI Agents</span>
+                <span class="pill key">MCP</span>
+                <span class="pill key">React</span>
+                <span class="pill key">TypeScript</span>
+                <span class="pill">Go</span>
+                <span class="pill">.NET</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="job reveal">
+            <span class="when">Atual</span>
+            <div>
+              <h3>Veridia IT <span>· Desenvolvedor de Software</span></h3>
+              <ul>
+                <li>Desenvolvimento e manutenção de aplicações web com React, TypeScript e .NET.</li>
+                <li>Desenvolvimento e integração de APIs REST.</li>
+                <li>Persistência com PostgreSQL e Entity Framework.</li>
+                <li>Formulários dinâmicos e validação de dados.</li>
+                <li>Integração com serviços externos.</li>
+                <li>Evolução de uma plataforma SaaS voltada à área de saúde.</li>
+              </ul>
+              <div class="pills">
+                <span class="pill key">C#</span>
+                <span class="pill key">.NET 8</span>
+                <span class="pill">ASP.NET Core</span>
+                <span class="pill key">React</span>
+                <span class="pill key">TypeScript</span>
+                <span class="pill key">PostgreSQL</span>
+                <span class="pill">JWT</span>
+                <span class="pill">Docker</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== STACK ===================== -->
+    <section class="block" id="stack">
+      <div class="wrap">
+        <div class="block-head reveal">
+          <span class="num">04 · Stack</span>
+          <h2>Ferramentas do dia a dia.</h2>
+        </div>
+
+        <div class="stack">
+          <div class="stack-group reveal">
+            <h3>Backend</h3>
+            <div class="pills">
+              <span class="pill key">.NET</span><span class="pill key">C#</span><span class="pill">ASP.NET Core</span>
+              <span class="pill">Go</span><span class="pill">Java</span><span class="pill">Spring Boot</span>
+              <span class="pill">REST APIs</span><span class="pill">JWT</span><span class="pill">Entity Framework</span>
+            </div>
+          </div>
+          <div class="stack-group reveal">
+            <h3>Frontend</h3>
+            <div class="pills">
+              <span class="pill key">React</span><span class="pill key">TypeScript</span><span class="pill">JavaScript</span>
+              <span class="pill">Vite</span><span class="pill">Tailwind CSS</span><span class="pill">HTML5</span>
+              <span class="pill">CSS3</span><span class="pill">React Native</span>
+            </div>
+          </div>
+          <div class="stack-group reveal">
+            <h3>Banco de dados</h3>
+            <div class="pills">
+              <span class="pill key">PostgreSQL</span><span class="pill">SQL</span><span class="pill">PL/SQL</span>
+              <span class="pill">Drizzle ORM</span><span class="pill">Entity Framework</span>
+            </div>
+          </div>
+          <div class="stack-group reveal">
+            <h3>Infra e ferramentas</h3>
+            <div class="pills">
+              <span class="pill">Docker</span><span class="pill">.NET Aspire</span><span class="pill">Azure</span>
+              <span class="pill">Git</span><span class="pill">GitHub</span><span class="pill">GitLab</span>
+            </div>
+          </div>
+          <div class="stack-group reveal">
+            <h3>Inteligência Artificial</h3>
+            <div class="pills">
+              <span class="pill key">LLMs</span><span class="pill key">AI Agents</span><span class="pill key">MCP</span>
+              <span class="pill">RAG</span><span class="pill">Context Engineering</span><span class="pill">Claude Code</span>
+              <span class="pill">Codex</span><span class="pill">Gemini</span><span class="pill">LSP</span>
+            </div>
+          </div>
+        </div>
+        <p class="legend reveal"><i></i> Foco principal</p>
+      </div>
+    </section>
+
+    <!-- ===================== FORMAÇÃO ===================== -->
+    <section class="block" id="formacao">
+      <div class="wrap">
+        <div class="block-head reveal">
+          <span class="num">05 · Formação</span>
+          <h2>Estudo e certificações.</h2>
+        </div>
+
+        <div class="indent reveal">
+          <div class="tabs" role="tablist" aria-label="Formação e certificações">
+            <span class="indicator" aria-hidden="true"></span>
+            <button role="tab" id="tab-0" aria-controls="slide-0" aria-selected="true">Formação acadêmica</button>
+            <button role="tab" id="tab-1" aria-controls="slide-1" aria-selected="false" tabindex="-1">Certificações e cursos</button>
+          </div>
+
+          <div class="carousel" id="carousel">
+            <div class="track" id="track">
+              <div class="slide" id="slide-0" role="tabpanel" aria-labelledby="tab-0">
+                <ul class="edu-list">
+                  <li>
+                    <span class="edu-logo"><img src="assets/logo-unigrande.jpg" alt="Unigrande" loading="lazy"></span>
+                    <div class="edu-info"><b>Análise e Desenvolvimento de Sistemas</b><small>Centro Universitário UNIGRANDE</small></div>
+                    <div class="edu-side"><span class="status live"><i></i>Em andamento</span><span class="yr">Previsão 2027/1</span></div>
+                  </li>
+                  <li>
+                    <span class="edu-logo"><img src="assets/logo-ifce.png" alt="IFCE" loading="lazy"></span>
+                    <div class="edu-info"><b>Técnico em Informática</b><small>Instituto Federal do Ceará · IFCE</small></div>
+                    <div class="edu-side"><span class="status">Concluído</span><span class="yr">2022 a 2025</span></div>
+                  </li>
+                  <li>
+                    <span class="edu-logo glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 9 12 4.5 21.5 9 12 13.5 2.5 9Z"/><path d="M6.5 11.2v4.3c1.5 1.4 3.4 2 5.500 2s4-.6 5.500-2v-4.300"/><path d="M21.500 9v5.500"/></svg></span>
+                    <div class="edu-info"><b>Ensino Médio</b><small>Prof(a) Eudes Veras</small></div>
+                    <div class="edu-side"><span class="status">Concluído</span><span class="yr">2022 a 2024</span></div>
+                  </li>
+                </ul>
+              </div>
+              <div class="slide" id="slide-1" role="tabpanel" aria-labelledby="tab-1" aria-hidden="true">
+                <ul class="edu-list certs">
+                  <li>
+                    <span class="edu-logo glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5.5"/><path d="m8.500 13.500-1.500 7 5-2.500 5 2.500-1.500-7"/></svg></span>
+                    <div class="edu-info"><b>Back-End Java</b><small>Santander</small></div>
+                    <span class="yr">2025</span>
+                  </li>
+                  <li>
+                    <span class="edu-logo glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m8 7-5 5 5 5M16 7l5 5-5 5M13.500 5l-3 14"/></svg></span>
+                    <div class="edu-info"><b>Java com Spring Boot</b></div>
+                    <span class="yr">Curso</span>
+                  </li>
+                  <li>
+                    <span class="edu-logo glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.500l1.800 4.700 4.700 1.800-4.700 1.800L12 16.500l-1.800-4.700L5.500 10l4.700-1.800L12 3.500Z"/><path d="M18.500 15.500v4M16.500 17.500h4"/></svg></span>
+                    <div class="edu-info"><b>Java com IA</b></div>
+                    <span class="yr">Curso</span>
+                  </li>
+                  <li>
+                    <span class="edu-logo glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m8 7-5 5 5 5M16 7l5 5-5 5M13.500 5l-3 14"/></svg></span>
+                    <div class="edu-info"><b>Java Completo</b></div>
+                    <span class="yr">Curso</span>
+                  </li>
+                  <li>
+                    <span class="edu-logo glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="7.500" ry="3"/><path d="M4.500 6v6c0 1.700 3.400 3 7.500 3s7.500-1.300 7.500-3V6"/><path d="M4.500 12v6c0 1.700 3.400 3 7.500 3s7.500-1.300 7.500-3v-6"/></svg></span>
+                    <div class="edu-info"><b>Oracle PL/SQL</b></div>
+                    <span class="yr">Curso</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="car-foot">
+            <div class="dots" aria-hidden="true"><span class="on"></span><span></span></div>
+            <div class="arrows">
+              <button type="button" id="prev" aria-label="Anterior" disabled>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+              </button>
+              <button type="button" id="next" aria-label="Próximo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== CONTATO ===================== -->
+  <section class="contact" id="contato">
+    <div class="wrap">
+      <span class="num reveal">06 · Contato</span>
+      <h2 class="reveal">Vamos construir <em>algo</em> juntos?</h2>
+      <p class="reveal">Aberto a conversas sobre produto, arquitetura, .NET, React e IA aplicada ao desenvolvimento de software.</p>
+      <div class="meta reveal">
+        <a class="btn primary" href="#" target="_blank" rel="noopener"><img class="ico" src="assets/icon-linkedin.png" alt="" aria-hidden="true">LinkedIn</a>
+        <a class="btn" href="https://github.com/ViniMesquitaa" target="_blank" rel="noopener"><img class="ico gh" src="assets/icon-github.png" alt="" aria-hidden="true">GitHub</a>
+      </div>
+      <footer>© 2026 Marcos Vinicius</footer>
+    </div>
+  </section>
+
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script>
+    // ---------- scroll suave ----------
+    const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let lenis = null;
+    if (!reduceMotion && typeof Lenis !== "undefined") {
+      lenis = new Lenis({ lerp: 0.075, wheelMultiplier: 0.9 });
+      const raf = (t) => { lenis.raf(t); requestAnimationFrame(raf); };
+      requestAnimationFrame(raf);
+      // links internos (#sobre, #contato...) deslizam com a mesma suavidade
+      document.addEventListener("click", (e) => {
+        const a = e.target.closest('a[href^="#"]');
+        if (!a) return;
+        const id = a.getAttribute("href");
+        const target = id.length > 1 && document.querySelector(id);
+        if (!target) return;
+        e.preventDefault();
+        lenis.scrollTo(target, { offset: id === "#topo" ? 0 : -90, duration: 1.6 });
+      });
+    }
+
+    // ---------- idioma PT / EN ----------
+    const EN = {
+      // nav e hero
+      "Sobre": "About",
+      "Projetos": "Projects",
+      "Experiência": "Experience",
+      "Formação": "Education",
+      "Contato": "Contact",
+      "Desenvolvedor de Software <b>Full Stack</b> com foco em .NET, React e <b>Inteligência Artificial</b> aplicada à engenharia de software.":
+        "<b>Full Stack</b> Software Developer focused on .NET, React and <b>Artificial Intelligence</b> applied to software engineering.",
+      "Ver projetos": "View projects",      // sobre
+      "01 · Sobre": "01 · About",
+      "Problemas reais, soluções simples.": "Real problems, simple solutions.",
+      "Construo software que torna processos mais simples e eficientes, do problema à arquitetura, da implementação à evolução.":
+        "I build software that makes processes simpler and more efficient, from the problem to the architecture, from implementation to evolution.",
+      "Minha experiência envolve desenvolvimento <strong>Full Stack</strong>, criação de APIs, arquitetura de software e interfaces modernas. Trabalho principalmente com o ecossistema <strong>.NET, C#, React e TypeScript</strong>.":
+        "My experience spans <strong>Full Stack</strong> development, API design, software architecture and modern interfaces. I work mainly with the <strong>.NET, C#, React and TypeScript</strong> ecosystem.",
+      "Tenho me aprofundado em <strong>IA aplicada à engenharia de software</strong>, como agentes, LLMs, RAG, MCP e Context Engineering. Atualmente desenvolvo a <strong>Neural Seam</strong>, uma plataforma de inteligência e orquestração do desenvolvimento de software com IA.":
+        "I've been going deep into <strong>AI applied to software engineering</strong>: agents, LLMs, RAG, MCP and Context Engineering. I'm currently building <strong>Neural Seam</strong>, a platform for intelligence and orchestration of AI-driven software development.",
+      // projetos
+      "02 · Projetos": "02 · Projects",
+      "O que estou construindo.": "What I'm building.",
+      "Projeto principal": "Main project",
+      "Plataforma que organiza e orquestra o desenvolvimento de software com IA: contexto compartilhado, documentação, planejamento e acompanhamento da execução de projetos.":
+        "A platform that organizes and orchestrates AI-driven software development: shared context, documentation, planning and tracking of project execution.",
+      "Arquitetura de plataforma SaaS": "SaaS platform architecture",
+      "Orquestração de agentes de IA com Claude, Gemini e Codex": "Orchestration of AI agents with Claude, Gemini and Codex",
+      "Context Engineering e documentação técnica viva": "Context Engineering and living technical documentation",
+      "Gestão de projetos, integrações com GitHub e estratégias de branches": "Project management, GitHub integrations and branching strategies",
+      "Ferramenta para acompanhar sessões de desenvolvimento assistido por IA.": "A tool to follow AI-assisted development sessions.",
+      "Monitoramento de atividades e análise de sessões": "Activity monitoring and session analysis",
+      "Acompanhamento de consumo de tokens": "Token usage tracking",
+      "Visualização de informações técnicas": "Technical insights visualization",
+      "Integração com ferramentas de IA para código": "Integration with AI coding tools",
+      "Open source · Em desenvolvimento": "Open source · In development",
+      "Gerenciamento de recursos da máquina para evitar gargalos de memória ao usar Docker e assistentes de programação ao mesmo tempo.":
+        "Machine resource management to avoid memory bottlenecks when running Docker and coding assistants at the same time.",
+      "Foco em memória RAM, processos e containers": "Focused on RAM, processes and containers",
+      "Aplicação desktop multiplataforma": "Cross-platform desktop app",
+      "Saúde mental · SaaS": "Mental health · SaaS",
+      "Saúde mental, sigilo e acolhimento": "Mental health, confidentiality and support",
+      "Plataforma que conecta quem precisa de acolhimento a psicólogos verificados pelo CRP, com anonimato por padrão: sem e-mail, sem nome real, só um alias e uma senha.":
+        "A platform connecting people who need support with CRP-verified psychologists, anonymous by default: no e-mail, no real name, just an alias and a password.",
+      "Alias anônimo": "Anonymous alias",
+      "Dados criptografados": "Encrypted data",
+      "Verificação CRP": "CRP verification",
+      "Anamneses personalizáveis": "Custom intake forms",
+      "Agenda e sessões": "Scheduling and sessions",
+      "Comunidade": "Community",
+      "Educação · SaaS": "Education · SaaS",
+      "Plataforma de estudos inteligente": "Smart study platform",
+      "Kanban, flashcards com IA, revisão espaçada e Método Feynman integrados numa plataforma construída sobre ciência cognitiva.":
+        "Kanban, AI flashcards, spaced repetition and the Feynman Technique, integrated into a platform built on cognitive science.",
+      "Flashcards com IA": "AI flashcards",
+      "Revisão espaçada": "Spaced repetition",
+      "Método Feynman": "Feynman Technique",
+      "Simulados ENEM": "ENEM practice exams",
+      "Relatórios": "Reports",
+      // experiência
+      "03 · Experiência": "03 · Experience",
+      "Onde trabalho.": "Where I work.",
+      "Atual": "Current",
+      "Uma software house fora do convencional. Em vez de só entregar código sob demanda, acelera projetos que já estão em andamento, cria produtos do zero e faz consultoria para empresas que já têm time de desenvolvimento.":
+        "An unconventional software house. Instead of just delivering code on demand, it accelerates projects already in progress, builds products from scratch and consults for companies that already have a development team.",
+      "Aceleração de projetos existentes junto ao time do cliente.": "Accelerating existing projects alongside the client's team.",
+      "Criação de produtos e plataformas do zero.": "Building products and platforms from scratch.",
+      "Consultoria em arquitetura, processos e engenharia de software.": "Consulting on architecture, processes and software engineering.",
+      "Engenharia orientada por IA, com agentes e Context Engineering.": "AI-driven engineering with agents and Context Engineering.",
+      "Veridia IT <span>· Desenvolvedor de Software</span>": "Veridia IT <span>· Software Developer</span>",
+      "Desenvolvimento e manutenção de aplicações web com React, TypeScript e .NET.": "Building and maintaining web applications with React, TypeScript and .NET.",
+      "Desenvolvimento e integração de APIs REST.": "Building and integrating REST APIs.",
+      "Persistência com PostgreSQL e Entity Framework.": "Persistence with PostgreSQL and Entity Framework.",
+      "Formulários dinâmicos e validação de dados.": "Dynamic forms and data validation.",
+      "Integração com serviços externos.": "Integration with external services.",
+      "Evolução de uma plataforma SaaS voltada à área de saúde.": "Evolving a SaaS platform for the healthcare sector.",
+      // stack
+      "Ferramentas do dia a dia.": "Everyday tools.",
+      "Banco de dados": "Databases",
+      "Infra e ferramentas": "Infra & tooling",
+      "Inteligência Artificial": "Artificial Intelligence",
+      "<i></i> Foco principal": "<i></i> Main focus",
+      // formação
+      "05 · Formação": "05 · Education",
+      "Estudo e certificações.": "Education and certifications.",
+      "Formação acadêmica": "Academic background",
+      "Certificações e cursos": "Certifications &amp; courses",
+      "Análise e Desenvolvimento de Sistemas": "Systems Analysis and Development",
+      "Centro Universitário UNIGRANDE": "UNIGRANDE University Center",
+      "<i></i>Em andamento": "<i></i>In progress",
+      "Previsão 2027/1": "Expected 2027/1",
+      "Técnico em Informática": "IT Technician",
+      "Instituto Federal do Ceará · IFCE": "Federal Institute of Ceará · IFCE",
+      "Concluído": "Completed",
+      "2022 a 2025": "2022 – 2025",
+      "2022 a 2024": "2022 – 2024",
+      "Ensino Médio": "High School",
+      "Java com Spring Boot": "Java with Spring Boot",
+      "Java com IA": "Java with AI",
+      "Java Completo": "Complete Java",
+      "Curso": "Course",
+      // contato
+      "06 · Contato": "06 · Contact",
+      "Vamos construir <em>algo</em> juntos?": "Let's build <em>something</em> together?",
+      "Aberto a conversas sobre produto, arquitetura, .NET, React e IA aplicada ao desenvolvimento de software.":
+        "Open to conversations about product, architecture, .NET, React and AI applied to software development.",
+    };
+    const META = {
+      pt: { title: document.title, desc: document.querySelector('meta[name="description"]').content,
+            theme: "Alternar entre modo dia e noite", tabs: "Formação e certificações", prev: "Anterior", next: "Próximo" },
+      en: { title: "Marcos Vinicius | Software Developer",
+            desc: "Marcos Vinicius, Full Stack Software Developer focused on .NET, React and AI applied to software engineering.",
+            theme: "Toggle day and night mode", tabs: "Education and certifications", prev: "Previous", next: "Next" },
+    };
+
+    // marca cada elemento traduzível uma vez, guardando o HTML em PT e em EN
+    const norm = (s) => s.replace(/\s+/g, " ").trim();
+    const i18nNodes = [];
+    document.querySelectorAll("body *:not(script):not(style):not(svg *)").forEach((el) => {
+      if (el.parentElement && el.parentElement.closest("[data-i18n]")) return;
+      const en = EN[norm(el.innerHTML)];
+      if (en === undefined) return;
+      el.setAttribute("data-i18n", "");
+      i18nNodes.push({ el, pt: el.innerHTML, en });
+    });
+
+    function setLang(lang) {
+      i18nNodes.forEach((n) => { n.el.innerHTML = lang === "en" ? n.en : n.pt; });
+      const m = META[lang];
+      document.documentElement.lang = lang === "en" ? "en" : "pt-BR";
+      document.title = m.title;
+      document.querySelector('meta[name="description"]').content = m.desc;
+      document.getElementById("theme").setAttribute("aria-label", m.theme);
+      document.querySelector(".tabs").setAttribute("aria-label", m.tabs);
+      document.getElementById("prev").setAttribute("aria-label", m.prev);
+      document.getElementById("next").setAttribute("aria-label", m.next);
+      document.querySelectorAll(".lang button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.lang === lang));
+      try { localStorage.setItem("lang", lang); } catch (e) {}
+      if (typeof go === "function") go(current); // reajusta o indicador das abas ao novo tamanho do texto
+    }
+    document.querySelectorAll(".lang button").forEach((b) => b.addEventListener("click", () => setLang(b.dataset.lang)));
+
+    // revela ao entrar na tela
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+
+    // nav sólida ao rolar
+    const nav = document.getElementById("nav");
+    const onScroll = () => nav.classList.toggle("solid", window.scrollY > 40);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    // tema dia / noite
+    const root = document.documentElement;
+    document.getElementById("theme").addEventListener("click", () => {
+      root.dataset.theme = root.dataset.theme === "dark" ? "light" : "dark";
+      try { localStorage.setItem("theme", root.dataset.theme); } catch (e) {}
+    });
+
+    // carrossel formação / certificações
+    const tabs = [...document.querySelectorAll('.tabs [role="tab"]')];
+    const slides = [...document.querySelectorAll(".slide")];
+    const track = document.getElementById("track");
+    const indicator = document.querySelector(".tabs .indicator");
+    const dots = [...document.querySelectorAll(".dots span")];
+    const prev = document.getElementById("prev");
+    const next = document.getElementById("next");
+    let current = 0;
+
+    function go(i) {
+      current = Math.max(0, Math.min(slides.length - 1, i));
+      track.style.transform = `translateX(-${current * 100}%)`;
+      tabs.forEach((t, k) => {
+        t.setAttribute("aria-selected", k === current);
+        t.tabIndex = k === current ? 0 : -1;
+      });
+      slides.forEach((s, k) => s.setAttribute("aria-hidden", k !== current));
+      dots.forEach((d, k) => d.classList.toggle("on", k === current));
+      const t = tabs[current];
+      indicator.style.width = t.offsetWidth + "px";
+      indicator.style.transform = `translateX(${t.offsetLeft - 5}px)`;
+      car.style.height = slides[current].offsetHeight + "px";
+      prev.disabled = current === 0;
+      next.disabled = current === slides.length - 1;
+    }
+    tabs.forEach((t, k) => {
+      t.addEventListener("click", () => go(k));
+      t.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+          go(current + (e.key === "ArrowRight" ? 1 : -1));
+          tabs[current].focus();
+        }
+      });
+    });
+    const car = document.getElementById("carousel");
+    prev.addEventListener("click", () => go(current - 1));
+    next.addEventListener("click", () => go(current + 1));
+
+    // arrastar no celular
+    let x0 = null;
+    car.addEventListener("pointerdown", (e) => { x0 = e.clientX; });
+    car.addEventListener("pointerup", (e) => {
+      if (x0 === null) return;
+      const dx = e.clientX - x0;
+      if (Math.abs(dx) > 50) go(current + (dx < 0 ? 1 : -1));
+      x0 = null;
+    });
+
+    document.fonts.ready.then(() => go(current));
+    window.addEventListener("resize", () => go(current));
+    go(0);
+
+    // idioma inicial: escolha salva, senão o idioma do navegador
+    let lang0 = null;
+    try { lang0 = localStorage.getItem("lang"); } catch (e) {}
+    if (!lang0) lang0 = (navigator.language || "pt").toLowerCase().startsWith("pt") ? "pt" : "en";
+    if (lang0 === "en") setLang("en");
+  </script>
+</body>
+</html>
